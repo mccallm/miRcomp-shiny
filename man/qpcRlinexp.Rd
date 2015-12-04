@@ -1,11 +1,11 @@
-\name{qpcRdefault}
+\name{qpcRlinexp}
 \docType{data}
-\alias{qpcRdefault}
-\title{The processed data generated using the default method (4
-  parameter log-logistic) implemented in the qpcR software package.}
+\alias{qpcRlinexp}
+\title{The processed data generated using the linear-exponential method
+  implemented in the qpcR software package.}
 \description{These data are also used to demonstrate the functionality
   of the miRcomp package.}
-\usage{data(qpcRdefault)}
+\usage{data(qpcRlinexp)}
 \format{A list with two elements.
   \tabular{ll}{
   ct \tab a miRNA x sample matrix of expression estimates \cr
@@ -13,5 +13,5 @@
   }}
 \keyword{datasets}
 \examples{
-  data(qpcRdefault)
+  data(qpcRlinexp)
 }

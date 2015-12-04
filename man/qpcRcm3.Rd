@@ -1,11 +1,12 @@
-\name{qpcRdefault}
+\name{qpcRcm3}
 \docType{data}
-\alias{qpcRdefault}
-\title{The processed data generated using the default method (4
-  parameter log-logistic) implemented in the qpcR software package.}
+\alias{qpcRcm3}
+\title{The processed data generated using the mechanistic cm3 method
+  proposed by Carr and Moore (2012) implemented in the
+  qpcR software package.}
 \description{These data are also used to demonstrate the functionality
   of the miRcomp package.}
-\usage{data(qpcRdefault)}
+\usage{data(qpcRcm3)}
 \format{A list with two elements.
   \tabular{ll}{
   ct \tab a miRNA x sample matrix of expression estimates \cr
@@ -13,5 +14,5 @@
   }}
 \keyword{datasets}
 \examples{
-  data(qpcRdefault)
+  data(qpcRcm3)
 }
