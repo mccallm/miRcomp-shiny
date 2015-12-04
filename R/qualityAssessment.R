@@ -6,7 +6,11 @@ qualityAssessment <- function(object1, object2=NULL,
     plotType <- match.arg(plotType)
 
     object1 <- checkObject(object1)
-    if(cloglog1) object1$qc <- -log(-log(object1$qc))
+    if(cloglog1){
+      object1$qc[which(object1$qc<=0, arr.ind=TRUE)] <- .Machine$double.eps
+      object1$qc[which(object1$qc>=0.9999, arr.ind=TRUE)] <- 0.9999
+      object1$qc <- -log(-log(object1$qc))
+    }
     if(is.null(object2)){
         if(is.null(label1)) label1 <- "Quality Score"
         if(plotType=="scatterplot"){
@@ -42,7 +46,11 @@ qualityAssessment <- function(object1, object2=NULL,
         }
     } else{
         object2 <- checkObject(object2)
-        if(cloglog2) object2$qc <- -log(-log(object2$qc))
+        if(cloglog2){
+          object2$qc[which(object2$qc<=0, arr.ind=TRUE)] <- .Machine$double.eps
+          object2$qc[which(object2$qc>=0.9999, arr.ind=TRUE)] <- 0.9999
+          object2$qc <- -log(-log(object2$qc))
+        }
         if(is.null(label1)) label1 <- "Object 1 Quality Score "
         if(is.null(label2)) label2 <- "Object 2 Quality Score"
         if(plotType=="scatterplot"){

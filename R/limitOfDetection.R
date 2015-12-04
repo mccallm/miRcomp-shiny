@@ -169,7 +169,7 @@ limitOfDetection <- function(object, qcThreshold,
                  ylim=c(lowtick,toptick+5))
             axis(side=2,at=seq(lowtick,toptick+5,by=5),
                  labels=c(as.character(seq(lowtick,toptick,by=5)),"NA"),las=2)
-            abline(a=0,b=1,lwd=2,lty=3,col="blue")
+            abline(h=0,lwd=2,lty=3,col="blue")
             legend("topleft",pch=c(19,17,15,18,4),title="Proporiton Poor Quality",
                    c("0/4","1/4","2/4","3/4","4/4"),ncol=2,cex=0.75,
                    col=c("black",rep("red",4)))
@@ -186,7 +186,7 @@ limitOfDetection <- function(object, qcThreshold,
                  ylim=c(lowtick,toptick+5))
             axis(side=2,at=seq(lowtick,toptick+5,by=5),
                  labels=c(as.character(seq(lowtick,toptick,by=5)),"NA"),las=2)
-            abline(a=0,b=1,lwd=2,lty=3,col="blue")
+            abline(h=0,lwd=2,lty=3,col="blue")
             legend("topleft",pch=c(19,17,15,18,4),title="Proporiton Poor Quality",
                    c("0/4","1/4","2/4","3/4","4/4"),ncol=2,cex=0.75,
                    col=c("black",rep("red",4)))
@@ -203,7 +203,7 @@ limitOfDetection <- function(object, qcThreshold,
                  ylim=c(lowtick,toptick+5))
             axis(side=2,at=seq(lowtick,toptick+5,by=5),
                  labels=c(as.character(seq(lowtick,toptick,by=5)),"NA"),las=2)
-            abline(a=0,b=1,lwd=2,lty=3,col="blue")
+            abline(h=0,lwd=2,lty=3,col="blue")
             legend("topleft",pch=c(19,17,15,18,4),title="Proporiton Poor Quality",
                    c("0/4","1/4","2/4","3/4","4/4"),ncol=2,cex=0.75,
                    col=c("black",rep("red",4)))
