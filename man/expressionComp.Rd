@@ -9,7 +9,7 @@ expressionComp(object1, qcThreshold1,
                            object2, qcThreshold2, 
                            label1=NULL, label2=NULL,
                            diffThreshold=2,
-                           plotType=c("scatterplot","MAplot")){
+                           plotType=c("scatterplot","MAplot"))
 }
 \arguments{
   \item{object1}{a list containing two elements: ct (the expression
