@@ -13,16 +13,16 @@ expressionComp(object1, qcThreshold1,
 }
 \arguments{
   \item{object1}{a list containing two elements: ct (the expression
-    estiamtes) and qc (quality scores)}
+    estimates) and qc (quality scores)}
   \item{qcThreshold1}{a numeric threshold corresponding to object1$qc
     below which values are considered low quality.} 
   \item{object2}{a list containing two elements: ct (the expression
-    estiamtes) and qc (quality scores)}
+    estimates) and qc (quality scores)}
   \item{qcThreshold2}{a numeric threshold corresponding to object2$qc
     below which values are considered low quality.} 
   \item{label1}{an optional label for plotting on the x-axis}
   \item{label2}{an optional label for plotting on the y-axis} 
-  \item{diffThrehsold}{feature / sample combinations for which the expression estimates differ by more than this value are returned by the function and highlighted in the plot.}
+  \item{diffThreshold}{feature / sample combinations for which the expression estimates differ by more than this value are returned by the function and highlighted in the plot.}
   \item{plotType}{scatterplot or MA-plot}
 }
 \value{
