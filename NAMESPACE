@@ -1,7 +1,10 @@
 import(miRcompData)
 import(KernSmooth)
-importFrom(graphics, smoothScatter)
-importFrom(utils, citation, toBibtex)
+importFrom(graphics, smoothScatter, abline, axis, 
+           boxplot, legend, lines, mtext, plot, points)
+importFrom(stats, binomial, glm, lm, mad, median,
+           predict, quantile, sd, var)
+importFrom(utils, citation, toBibtex, data)
 importClassesFrom(Biobase, AnnotatedDataFrame, AssayData, eSet,
                   ExpressionSet, MIAME, Versioned, VersionedBiobase,
                   Versions)
