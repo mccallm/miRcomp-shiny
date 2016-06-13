@@ -15,5 +15,6 @@ importMethodsFrom(Biobase, annotatedDataFrameFrom, exprs, se.exprs, "se.exprs<-"
 importFrom(Biobase, assayDataElement, assayDataElementReplace, assayDataNew, pData)
 importFrom(methods, is, callNextMethod, new, setAs, as)
 
-export(accuracy, precision, limitOfDetection, titrationResponse, completeFeatures, qualityAssessment, expressionComp)
+export(accuracy, precision, limitOfDetection, titrationResponse, completeFeatures, 
+       qualityAssessment, expressionComp, miRcompShinyApp)
 

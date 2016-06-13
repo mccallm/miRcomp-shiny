@@ -1,0 +1,11 @@
+citEntry(entry = "Article",
+         author = "Matthew N McCall and AS Baras and A Crits-Christoph and R Ingersoll and MA McAlexander and KW Witwer and MK Halushka",
+         title = "A benchmark for microRNA quantification algorithms using the OpenArray platform",
+         journal = "BMC Bioinformatics",
+         volume = "17",
+         number = "138",
+         year = "2016",
+         publisher = "BioMed Central",
+         textVersion = "McCall MN, Baras AS, Crits-Christoph A, Ingersoll R, McAlexander MA, Witwer KW, Halushka MK (2016). A benchmark for microRNA quantification algorithms using the OpenArray platform, BMC Bioinformatics, 17:138.",
+	 header = "For use of the miRcomp package, please cite:"
+)
