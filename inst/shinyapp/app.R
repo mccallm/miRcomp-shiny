@@ -295,7 +295,7 @@ ui <- shinyUI(fluidPage(navbarPage(
              mainPanel(
                # titlePanel("miRcomp-Shiny"),
                h3(
-                 "Interacitve assessment of microRNA quantification and quality control algorithms"
+                 "Interactive assessment of microRNA quantification and quality control algorithms"
                ),
                align = "center",
                tabsetPanel(
