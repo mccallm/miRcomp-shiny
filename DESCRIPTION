@@ -1,6 +1,6 @@
 Package: miRcomp
-Version: 1.5.0
-Date: 2016-06-13
+Version: 1.5.1
+Date: 2017-03-04
 Title: Tools to assess and compare miRNA expression estimatation
         methods
 Description: Based on a large miRNA dilution study, this package

@@ -10,3 +10,9 @@
     \item Added NEWS.Rd file.
   }
 }
+
+\section{Version 1.5.1}{
+  \itemize{
+    \item Updated miRcomp Shiny app to final version prior to paper submission.
+  }
+}
