@@ -388,7 +388,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                     sliderInput(
                                       "qcThresholdA",
                                       label = "Proportion of poor quality data to exclude:",
-                                      min = 0,
+                                      min = 0.02,
                                       max = 1.0,
                                       value = c(0.00)
                                     ),
@@ -415,7 +415,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       "qcThresholdB",
                                       label =
                                         "Proportion of poor quality data to exclude from first method:",
-                                      min = 0,
+                                      min = 0.02,
                                       max = 1.0,
                                       value = c(0.00)
                                     ),
@@ -431,7 +431,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                         label =
                                           "Proportion of poor quality data to exclude from second method:",
                                         min =
-                                          0,
+                                          0.02,
                                         max = 1.0,
                                         value = c(0.00)
                                       ),
@@ -458,9 +458,9 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       "qcThresholdC",
                                       label =
                                         "Proportion of poor quality data to exclude from first method:",
-                                      min = 0,
+                                      min = 0.02,
                                       max = 1.0,
-                                      value = c(0.00)
+                                      value = c(0.02)
                                     ),
                                     textOutput("text3")
                                   ),
@@ -474,9 +474,9 @@ ui <- shinyUI(fluidPage(navbarPage(
                                         label =
                                           "Proportion of poor quality data to exclude from second method:",
                                         min =
-                                          0.0,
+                                          0.02,
                                         max = 1.0,
-                                        value = c(0.00)
+                                        value = c(0.02)
                                       ),
                                       textOutput("text6"),
                                       radioButtons(
@@ -533,9 +533,9 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       "qcThresholdE",
                                       label =
                                         "Proportion of poor quality data to exclude from first method:",
-                                      min = 0,
+                                      min = 0.02,
                                       max = 1.0,
-                                      value = c(0.00)
+                                      value = c(0.02)
                                     ),
                                     textOutput("text4")
                                   ),
@@ -549,9 +549,9 @@ ui <- shinyUI(fluidPage(navbarPage(
                                         label =
                                           "Proportion of poor quality data to exclude from second method:",
                                         min =
-                                          0,
+                                          0.02,
                                         max = 1.0,
-                                        value = c(0.00)
+                                        value = c(0.02)
                                       ),
                                       textOutput("text7")
                                     )
