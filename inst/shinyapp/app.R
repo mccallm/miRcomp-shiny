@@ -26,6 +26,9 @@ server <- shinyServer(function(input, output, session) {
     return(list(ct = ct, qc = qc))
   })
   
+  datasetInput <- reactive({
+    object = get(input$datasets)
+  })
   
   setCustom <- reactive({
     if (input$chooseFirstMethod == "custom" ||
@@ -61,6 +64,9 @@ server <- shinyServer(function(input, output, session) {
         quantile(get(input$chooseSecondMethod)$qc,
                  input$qcThreshold2B,
                  na.rm = TRUE)
+      validate(
+        need(qcThresh2 < 0.90, "Not enough good quality data")
+      )
     } else
       qcThresh2 <- NULL
     accuracy(
@@ -254,6 +260,67 @@ server <- shinyServer(function(input, output, session) {
       paste("")
   })
   
+  output$figcaption <- renderText({
+    paste(
+      "Limit of Detection: 
+      These boxplots show the average observed expression
+      stratified by the proportion of poor quality data points.
+      Below each box, the number of unique feature/sample
+      type combinations each box contains is reported."
+    )
+  })
+  
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste(input$datasets, ".csv", sep = "")
+    },
+    content = function(file) {
+      sep <- switch(input$fileFormat, ".csv" = ",", ".tsv" = "\t")
+      write.table(datasetInput(), file, sep = sep, row.names = FALSE)
+    }
+  )
+  
+  output$accuracyCaption <- renderText({
+    paste(
+      "Accuracy: To assess accuracy, we calculate the signal detect slope:
+      the slope of the regression line of observed expression on
+      expected expression for both the selected algorithms.
+      The ideal signal detect slope is one, representing agreement between
+      observed and expected expression. The signal detect slopes are stratified
+      by pure sample expression. Each point represents an miRNA. Points in the
+      figures below are grey if the signal detect slope is not statistically
+      signficantly different from zero."
+    )
+  })
+  
+  output$precisionCaption <- renderText({
+    paste(
+      "Precision: we calculate the within-replicate coefficient of variation, 
+      calculated as the within-replicate standard deviation divided by the 
+      within-replicate mean, for both the algorithms selected.
+      These are calculated for each set of replicates (unique feature/sample type combination)
+      that are of good quality and stratified by the observed expression"
+    )
+  })
+  
+  output$qAcaption <- renderText({
+    "A direct comparison between the quality scores: Life Technologies (LifeTech)
+    AmpScore and qpcR R-squared. The vertical dashed line represents the recommended
+    AmpScore threshold of 1.25. The horizontal dashed line represents a potential
+    R-squared threshold chosen by examination of this figure. Each point represents
+    the quality values for a unique miRNA/sample combination. Two-dimensional scatter-plot
+    smoothing is used to avoid over-plotting and convey the distribution of points across
+    the plotting region"
+  })
+  
+  output$tRcaption <- renderText({
+    "Titration Response. To examine the titration response, we plot
+    the proportion of features that show monotone increasing expression
+    as the amount of input RNA increases stratified by the difference
+    in expression between the sample being titrated and the sample being
+    held constant."
+  })
+  
   output$lodText <- renderText({
     paste(
       "You are currently plotting this method:",
@@ -261,6 +328,7 @@ server <- shinyServer(function(input, output, session) {
       ". To change this, select the method you would like to plot as your first method."
     )
   })
+
 })
 
 ui <- shinyUI(fluidPage(navbarPage(
@@ -293,7 +361,6 @@ ui <- shinyUI(fluidPage(navbarPage(
                )
              ),
              mainPanel(
-               # titlePanel("miRcomp-Shiny"),
                h3(
                  "Interactive assessment of microRNA quantification and quality control algorithms"
                ),
@@ -311,12 +378,16 @@ ui <- shinyUI(fluidPage(navbarPage(
                ),
                conditionalPanel("input.tabs=='A'",
                                 fluidRow(
+                                  tags$br(),
                                   textOutput("lodText"),
+                                  tags$br(),
+                                  textOutput("figcaption"),
+                                  tags$br(),
                                   column(
                                     4,
                                     sliderInput(
                                       "qcThresholdA",
-                                      label = "Percentage of data to exclude from method:",
+                                      label = "Proportion of poor quality data to exclude:",
                                       min = 0,
                                       max = 1.0,
                                       value = c(0.00)
@@ -335,13 +406,15 @@ ui <- shinyUI(fluidPage(navbarPage(
                                          ))
                                 )),
                conditionalPanel(condition = "input.tabs=='B'",
+                                textOutput("accuracyCaption"),
+                                tags$br(),
                                 fluidRow(
                                   column(
                                     4,
                                     sliderInput(
                                       "qcThresholdB",
                                       label =
-                                        "Percentage of data to exclude from first method:",
+                                        "Proportion of poor quality data to exclude from first method:",
                                       min = 0,
                                       max = 1.0,
                                       value = c(0.00)
@@ -356,7 +429,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       sliderInput(
                                         "qcThreshold2B",
                                         label =
-                                          "Percentage of data to exclude from second method:",
+                                          "Proportion of poor quality data to exclude from second method:",
                                         min =
                                           0,
                                         max = 1.0,
@@ -376,13 +449,15 @@ ui <- shinyUI(fluidPage(navbarPage(
                                   )
                                 )),
                conditionalPanel(condition = "input.tabs=='C'",
+                                textOutput("precisionCaption"), 
+                                tags$br(),
                                 fluidRow(
                                   column(
                                     4,
                                     sliderInput(
                                       "qcThresholdC",
                                       label =
-                                        "Percentage of data to exclude from first method:",
+                                        "Proportion of poor quality data to exclude from first method:",
                                       min = 0,
                                       max = 1.0,
                                       value = c(0.00)
@@ -397,9 +472,9 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       sliderInput(
                                         "qcThreshold2C",
                                         label =
-                                          "Percentage of data to exclude from second method:",
+                                          "Proportion of poor quality data to exclude from second method:",
                                         min =
-                                          0,
+                                          0.0,
                                         max = 1.0,
                                         value = c(0.00)
                                       ),
@@ -436,6 +511,8 @@ ui <- shinyUI(fluidPage(navbarPage(
                                   )
                                 )),
                conditionalPanel(condition = "input.tabs=='D'",
+                                textOutput("qAcaption"),
+                                tags$br(),
                                 fluidRow(column(
                                   4, offset = 1,
                                   radioButtons(
@@ -447,13 +524,15 @@ ui <- shinyUI(fluidPage(navbarPage(
                                   )
                                 ))),
                conditionalPanel(condition = "input.tabs=='E'",
+                                textOutput("tRcaption"), 
+                                tags$br(),
                                 fluidRow(
                                   column(
                                     3,
                                     sliderInput(
                                       "qcThresholdE",
                                       label =
-                                        "Percentage of data to exclude from first method:",
+                                        "Proportion of poor quality data to exclude from first method:",
                                       min = 0,
                                       max = 1.0,
                                       value = c(0.00)
@@ -468,7 +547,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       sliderInput(
                                         "qcThreshold2E",
                                         label =
-                                          "Percentage of data to exclude from second method:",
+                                          "Proportion of poor quality data to exclude from second method:",
                                         min =
                                           0,
                                         max = 1.0,
@@ -490,22 +569,46 @@ ui <- shinyUI(fluidPage(navbarPage(
              )
              
            )),
-  tabPanel("Dataset Descriptions", 
+  tabPanel("Intended Users", 
+           h3("Methodology and quality threshold selection"),
+           p("A user who is selecting an existing miRNA expression estimation methodology to analyze a data set can use miRcomp-Shiny to evaluate the performance of different methods based on the benchmark dataset."),
+           h3("Comparison of novel algorithms with current methods"), 
+           p("A user who has developed a new method for miRNA expression estimation can utilize the repository of existing methods in miRcomp-Shiny to compare the performance based on the assessments that are most relevant to their research.")
+           
+  ),
+  
+  tabPanel("Dataset Descriptions/ Download", 
+           selectInput(
+             "datasets",
+             label = 'Select Dataset to download',
+             choices = data(package = "miRcomp")$results[, "Item"]
+           ),
+           radioButtons(
+             "fileFormat", 
+             label= 'Select file format to download data', 
+             choices=c(".csv", ".tsv")
+           ),
+           downloadButton("downloadData", "Download"),
            h3("Lifetech"),
            p("The processed data generated using the LifeTech software."),
            tags$hr(style="border: 0; height: 1px;background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"),
+           
            h3("qpcRb4"),
            p("The processed data generated using the 4 parameter sigmoidal method from the qpcR software."),
            tags$hr(style="border: 0; height: 1px;background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"),
+           
            h3("qpcRb5"),
            p("The processed data generated using the 5 parameter sigmodial method from the qpcR software."),
            tags$hr(style="border: 0; height: 1px;background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"),
+           
            h3("qpcRdefault"),
            p("The processed data generated using the default method (4 parameter log-logistic) implemented in the qpcR software package"),
            tags$hr(style="border: 0; height: 1px;background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"),
+           
            h3("qpcRl5"),
            p("The processed data generated using the 5 parameter log-logistic method from the qpcR software."),
            tags$hr(style="border: 0; height: 1px;background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"),
+           
            h3("qpcRlinexp"),
            p("The processed data generated using the linear-exponential method implemented in the qpcR software package.")
            
