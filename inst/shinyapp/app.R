@@ -620,6 +620,17 @@ ui <- shinyUI(fluidPage(navbarPage(
                assess the performance of methods from amplification curves. Therefore, it will be necessary to download
               this data to assess the performance of a new method to compare to existing methods hosted on this application. 
                The data can be found at : ", tags$a(href = "https://bioconductor.org/packages/release/data/experiment/html/miRcompData.html","miRcomp Data"))
-             ))))
+             ), 
+    tabPanel("Using your own Data", 
+             h2("Steps for using your own data"), 
+             tags$ol(
+               tags$li("Select method existing method embedded into miRcomp-Shiny for comparison in dropdown for choosing first method"),
+               tags$li("Choose \"custom\" using dropdown for choosing second method "),
+               ##img(),
+               tags$li("Run your algorithm on the benchmark data and upload resulting matricies of quality values (qc)
+                        and expression estimates (ct). For samples of these matricies, download any of the available datasets.")
+             )
+             )
+  )))
 
 shinyApp(ui = ui, server = server)
