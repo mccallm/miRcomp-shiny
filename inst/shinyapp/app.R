@@ -1,6 +1,7 @@
 library(BiocInstaller)
 library(miRcomp)
 library(shiny)
+library(gridExtra)
 
 server <- shinyServer(function(input, output, session) {
   data(list = data(package = "miRcomp")$results[, "Item"],
@@ -43,18 +44,19 @@ server <- shinyServer(function(input, output, session) {
     }
   })
   
-  plotLoD <- function() {
+  plotLoD <- function(method) {
     setCustom()
     limitOfDetection(
-      object = get(input$chooseFirstMethod),
+      object = method,
       qcThreshold = quantile(
-        get(input$chooseFirstMethod)$qc,
+        method$qc,
         input$qcThresholdA,
         na.rm = TRUE
       ),
       plotType = (input$plotTypes)
     )
   }
+  
   
   plotAccuracy <- function() {
     setCustom()
@@ -148,7 +150,11 @@ server <- shinyServer(function(input, output, session) {
   
   
   output$LoD <- renderPlot({
-    plotLoD()
+    plotLoD(get(input$chooseFirstMethod))
+  })
+  
+  output$LoD_x <- renderPlot({
+    plotLoD(get(input$chooseSecondMethod))
   })
   
   output$A <- renderPlot({
@@ -323,11 +329,18 @@ server <- shinyServer(function(input, output, session) {
   
   output$lodText <- renderText({
     paste(
-      "You are currently plotting this method:",
       input$chooseFirstMethod,
-      ". To change this, select the method you would like to plot as your first method."
+      " Limit of Detection"
     )
   })
+  
+  output$lodText_x <- renderText({
+    paste(
+      input$chooseSecondMethod,
+      " Limit of Detection"
+    )
+  })
+  
 
 })
 
@@ -368,7 +381,8 @@ ui <- shinyUI(fluidPage(navbarPage(
                tabsetPanel(
                  id = "tabs",
                  tabPanel("Limit of Detection", value =
-                            "A", plotOutput("LoD")),
+                            "A", tags$br(), textOutput("lodText"), plotOutput("LoD"), tags$br(), textOutput("lodText_x"), 
+                            plotOutput("LoD_x")),
                  tabPanel("Accuracy", value = "B", plotOutput("A")),
                  tabPanel("Precision", value = "C", plotOutput("P")),
                  tabPanel("Quality Assessment", value =
@@ -376,11 +390,8 @@ ui <- shinyUI(fluidPage(navbarPage(
                  tabPanel("Titration Response", value =
                             "E", plotOutput("Tr"))
                ),
-               conditionalPanel("input.tabs=='A'",
+               conditionalPanel(align = "left", condition = "input.tabs=='A'",
                                 fluidRow(
-                                  tags$br(),
-                                  textOutput("lodText"),
-                                  tags$br(),
                                   textOutput("figcaption"),
                                   tags$br(),
                                   column(
@@ -389,7 +400,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       "qcThresholdA",
                                       label = "Proportion of poor quality data to exclude:",
                                       min = 0.02,
-                                      max = 1.0,
+                                      max = 0.5,
                                       value = c(0.00)
                                     ),
                                     textOutput("text1")
@@ -405,7 +416,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                            )
                                          ))
                                 )),
-               conditionalPanel(condition = "input.tabs=='B'",
+               conditionalPanel(align="left", condition = "input.tabs=='B'",
                                 textOutput("accuracyCaption"),
                                 tags$br(),
                                 fluidRow(
@@ -416,7 +427,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       label =
                                         "Proportion of poor quality data to exclude from first method:",
                                       min = 0.02,
-                                      max = 1.0,
+                                      max = 0.5,
                                       value = c(0.00)
                                     ),
                                     textOutput("text2")
@@ -432,7 +443,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                           "Proportion of poor quality data to exclude from second method:",
                                         min =
                                           0.02,
-                                        max = 1.0,
+                                        max = 0.5,
                                         value = c(0.00)
                                       ),
                                       textOutput("text5")
@@ -448,7 +459,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                     )
                                   )
                                 )),
-               conditionalPanel(condition = "input.tabs=='C'",
+               conditionalPanel(align="left", condition = "input.tabs=='C'",
                                 textOutput("precisionCaption"), 
                                 tags$br(),
                                 fluidRow(
@@ -459,7 +470,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       label =
                                         "Proportion of poor quality data to exclude from first method:",
                                       min = 0.02,
-                                      max = 1.0,
+                                      max = 0.5,
                                       value = c(0.02)
                                     ),
                                     textOutput("text3")
@@ -475,7 +486,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                           "Proportion of poor quality data to exclude from second method:",
                                         min =
                                           0.02,
-                                        max = 1.0,
+                                        max = 0.5,
                                         value = c(0.02)
                                       ),
                                       textOutput("text6"),
@@ -510,7 +521,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                     )
                                   )
                                 )),
-               conditionalPanel(condition = "input.tabs=='D'",
+               conditionalPanel(align="left", condition = "input.tabs=='D'",
                                 textOutput("qAcaption"),
                                 tags$br(),
                                 fluidRow(column(
@@ -523,7 +534,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                         "scatterplot")
                                   )
                                 ))),
-               conditionalPanel(condition = "input.tabs=='E'",
+               conditionalPanel(align="left", condition = "input.tabs=='E'",
                                 textOutput("tRcaption"), 
                                 tags$br(),
                                 fluidRow(
@@ -534,7 +545,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                       label =
                                         "Proportion of poor quality data to exclude from first method:",
                                       min = 0.02,
-                                      max = 1.0,
+                                      max = 0.5,
                                       value = c(0.02)
                                     ),
                                     textOutput("text4")
@@ -550,7 +561,7 @@ ui <- shinyUI(fluidPage(navbarPage(
                                           "Proportion of poor quality data to exclude from second method:",
                                         min =
                                           0.02,
-                                        max = 1.0,
+                                        max = 0.5,
                                         value = c(0.02)
                                       ),
                                       textOutput("text7")
