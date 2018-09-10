@@ -66,9 +66,6 @@ server <- shinyServer(function(input, output, session) {
         quantile(get(input$chooseSecondMethod)$qc,
                  input$qcThreshold2B,
                  na.rm = TRUE)
-      validate(
-        need(qcThresh2 < 0.90, "Not enough good quality data")
-      )
     } else
       qcThresh2 <- NULL
     accuracy(
